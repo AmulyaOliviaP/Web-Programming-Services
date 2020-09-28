@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head runat="server">
+<meta charset="UTF-8">
+<style>
+div#test{ border:#000 1px solid; padding:10px 40px 40px 40px; }
+</style>
+<script language ="javascript" >
+var tim;
+var min = 05;
+var sec = 60;
+var f = new Date();
+function f1() {
+            f2();
+            document.getElementById("starttime").innerHTML = "Your started your Exam at " + f.getHours() + ":" + f.getMinutes();
+        }
+        function f2() {
+            if (parseInt(sec) > 0) {
+                sec = parseInt(sec) - 1;
+                document.getElementById("showtime").innerHTML = "Your Left Time  is :"+min+" Minutes ," + sec+" Seconds";
+                tim = setTimeout("f2()", 1000);
+            }
+            else {
+                if (parseInt(sec) == 0) {
+                    min = parseInt(min) - 1;
+                    if (parseInt(min) == 0) {
+                        clearTimeout(tim);
+                        location.href = "default5.aspx";
+                    }
+                    else {
+                        sec = 60;
+                        document.getElementById("showtime").innerHTML = "Your Left Time  is :" + min + " Minutes ," + sec + " Seconds";
+                        tim = setTimeout("f2()", 1000);
+                    }
+                }
+               
+            }
+}
+var pos = 0, test, test_status, question, choice, choices, chA, chB, chC, correct = 0;
+var questions = [
+    [ "Which of the following is a benefit of using a web service?", "Web services allows you to expose the functionality of your existing code over the network. Once it is exposed on the network, other application can use the functionality of your program.", "Web services allow various applications to talk to each other and share data and services among themselves.", "Web services use standardized industry standard protocol for the communication", "C" ],
+	[ "Which of the following is correct about WSDL?", "WSDL is the standard format for describing a web service.", "WSDL definition describes how to access a web service and what operations it will perform.", "WSDL is a language for describing how to interface with XML-based services.", "C" ],
+	[ "Web Services is not tied to any one operating system or programming language.", "True", "False", "Insufficient Information", "A" ],
+	[ "Web Services are _______________.", "Application IDE", "Application Designing Tool", "Application Components", "C" ]
+];
+
+function _(x){
+	return document.getElementById(x);
+}
+function renderQuestion(){
+	test = _("test");
+	if(pos >= questions.length){
+		test.innerHTML = "<h2>You got "+correct+" of "+questions.length+" questions correct</h2>";
+		_("test_status").innerHTML = "Test Completed";
+		pos = 0;
+		correct = 0;
+		return false;
+	}
+	_("test_status").innerHTML = "Question "+(pos+1)+" of "+questions.length;
+	question = questions[pos][0];
+	chA = questions[pos][1];
+	chB = questions[pos][2];
+	chC = questions[pos][3];
+	test.innerHTML = "<h3>"+question+"</h3>";
+	test.innerHTML += "<input type='checkBox' name='choices' value='A'> "+chA+"<br>";
+	test.innerHTML += "<input type='checkBox' name='choices' value='B'> "+chB+"<br>";
+	test.innerHTML += "<input type='checkBox' name='choices' value='C'> "+chC+"<br><br>";
+	test.innerHTML += "<button onclick='checkAnswer()'>Submit Answer</button>";
+}
+function checkAnswer(){
+	choices = document.getElementsByName("choices");
+	for(var i=0; i<choices.length; i++){
+		if(choices[i].checked){
+			choice = choices[i].value;
+		}
+	}
+	if(choice == questions[pos][4]){
+		correct++;
+	}
+	pos++;
+	renderQuestion();
+}
+window.addEventListener("load", renderQuestion, false);
+</script>
+</head>
+<body onload="f1()" >
+<form id="form1" runat="server">
+    <div>
+      <table width="100%" align="center">
+        <tr>
+          <td colspan="2">
+            <h2><i>All The Best For Your Test</i></h2>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="starttime"></div><br />
+            <div id="endtime"></div><br />
+            <div id="showtime"></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+             
+              <br />
+            
+              
+          </td>
+         
+        </tr>
+      </table>
+      <br />
+   
+
+    </div>
+</form>
+<h2 id="test_status"></h2>
+<div id="test"></div>
+</body>
+</html>
